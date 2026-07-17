@@ -16,20 +16,37 @@ dificuldades = {'fácil':facil,
                 'médio':medio, 
                 'difícil':dificil}
 
+linguagens = {'inglês': "en",
+              'espanhol': "es",
+              'russo': "ru",
+              'indonésio': "id",
+              'polonês': "pl",
+              'italiano': "it",
+              'turco': "tr"}
+
+
 print('-'*5,"<Tradutor simulator>",'-'*5)
 
 while True:
-    resposta1= input("Escolha sua dificuldade (fácil, médio, difícil): ")
-    if resposta1== 'fácil' or resposta1=='médio':
+    print("Escolha o idioma para o desafio ")
+    resposta1= input(linguagens.keys())
+    if resposta1 in linguagens.keys():
         break
-    elif resposta1== 'difícil':
+    else:
+        print("Idioma inválido. Tente novamente.")
+
+while True: 
+    resposta2= input("Escolha sua dificuldade (fácil, médio, difícil): ")
+    if resposta2== 'fácil' or resposta2=='médio':
+        break
+    elif resposta2== 'difícil':
         confirmação = input('Você tem certeza? (s/n): ')
         if confirmação== 's':
             break
     else:
         print("Dificuldade inválida. Tente novamente.")
 
-print('Você escolheu a dificuldade:', '\n', resposta1)
+print('Você escolheu a dificuldade:', '\n', resposta2)
 print('Começando em 3 segundos...')
 print('3')
 time.sleep(1)
@@ -40,7 +57,7 @@ time.sleep(1)
 print('Começando!')
 
 for i in range(5):
-    palavra = random.choice((dificuldades[resposta1]))
+    palavra = random.choice((dificuldades[resposta2]))
     print('Escolhendo a palavra...')
     time.sleep(1)
     print('Traduza a palavra:', palavra)
@@ -61,7 +78,7 @@ for i in range(5):
             audio = recognizer.record(source)
 
         try:
-            fala = recognizer.recognize_google(audio, language="en")
+            fala = recognizer.recognize_google(audio, language=linguagens.get(resposta1))
             print("Sua resposta:", fala)
             break
         except sr.UnknownValueError:             # - se o Google não conseguiu entender a fala devido a ruídos ou silêncio
@@ -69,13 +86,13 @@ for i in range(5):
         except sr.RequestError as e:             # - se não houver conexão com a Internet ou a API estiver indisponível
             print(f"Service error: {e}")
     translator = Translator()
-    translated = translator.translate(palavra, dest='en')
+    translated = translator.translate(palavra, dest=linguagens.get(resposta1))
     if fala.lower() == translated.text.lower():
         print("✅ Correto!")
         pontos += 1
     else:
         print("❌ Incorreto! A tradução correta é:", translated.text)
-    (dificuldades[resposta1]).remove(palavra)
+    (dificuldades[resposta2]).remove(palavra)
     
     
 print("Sua pontuação final é", pontos, "de 5.")
